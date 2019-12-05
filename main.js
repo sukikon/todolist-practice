@@ -1,3 +1,4 @@
+//i hate you QQQQQ
 function get_todo() {
     var todo = new Array;
     var todoString = localStorage.getItem('todo');
