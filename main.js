@@ -76,6 +76,11 @@ function show() {
         buttons[i].addEventListener('change', done)
     };
 }
-
+function clear(){
+    localStorage.clear();
+    show();
+}
+clear();
 document.getElementById('add').addEventListener('click', add);
+document.getElementById('clear').addEventListener('click',clear);
 show();
