@@ -1,4 +1,3 @@
-//i hate you QQQQQ
 function get_todo() {
     var todo = new Array;
     var todoString = localStorage.getItem('todo');
@@ -7,13 +6,13 @@ function get_todo() {
     }
     return todo;
 }
-function get_fin(){
-    var fin = new Array;
-    var finString = localStorage.getItem('fin');
-    if(finString !== null){
-        fin = JSON.parse(finString);
+function get_done(){
+    var done = new Array;
+    var doneString = localStorage.getItem('fin');
+    if(doneString !== null){
+        done = JSON.parse(doneString);
     }
-    return fin;
+    return done;
 }
  
 function add() {
@@ -35,47 +34,64 @@ function add() {
 function done() {
     var id = this.getAttribute('id');
     var todo = get_todo();
-    var fin = get_fin();
+    var done = get_done();
 
-    fin.push(todo[id]);
+    done.push(todo[id]);
     todo.splice(id, 1);
 
     localStorage.setItem('todo', JSON.stringify(todo));
-    localStorage.setItem('fin', JSON.stringify(fin));
+    localStorage.setItem('fin', JSON.stringify(done));
     
- 
     show();
- 
+    return false;
+}
+function undo(){
+    var id = this.getAttribute('id');
+    var todo = get_todo();
+    var done = get_done();
+
+    todo.push(done[id]);
+    done.splice(id, 1);
+
+    localStorage.setItem('todo', JSON.stringify(todo));
+    localStorage.setItem('fin', JSON.stringify(done));
+    
+    show();
     return false;
 }
  
 function show() {
     var todo = get_todo();
-    var fin = get_fin();
+    var fin = get_done();
  
     var html = '<ul>';
     for(var i=0; i<todo.length; i++) {
-        html += '<li><input type="checkbox" name="done" id="' + i  + '">' + todo[i] + '</li>';
+        html += '<li><input type="checkbox" name="uncheck" id="' + i  + '">' + todo[i] + '</li>';
     };
     html += '</ul>';
 
     var htmlf = '<ul>';
     for(var i=0; i<fin.length; i++) {
-        htmlf += '<li><input type="checkbox" name="done" checked="true" id="' + i  + '">' + fin[i] + '</li>'
+        htmlf += '<li><input type="checkbox" name="check" checked="true" id="' + i  + '">' + fin[i] + '</li>'
     };
     htmlf += '</ul>';
 
     //<input type="checkbox" name="" id="">
  
     document.getElementById('todo').innerHTML = html;
-    document.getElementById('fin').innerHTML = htmlf;
+    document.getElementById('doned').innerHTML = htmlf;
  
-    var buttons = document.getElementsByName('done');
+    var todoCheck = document.getElementsByName('uncheck');
+    var doneCheck = document.getElementsByName('check');
     
-    for (var i=0; i < buttons.length; i++) {
-        buttons[i].addEventListener('change', done)
+    for (var i=0; i < todoCheck.length; i++) {
+        todoCheck[i].addEventListener('change', done)
+    };
+    for (var i=0; i < doneCheck.length; i++) {
+        doneCheck[i].addEventListener('change', undo)
     };
 }
+
 function clear(){
     localStorage.clear();
     show();
